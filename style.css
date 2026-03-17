@@ -1,0 +1,197 @@
+/* Basic layout + typography */
+:root {
+	--bg: #0d1117;
+	--panel: #161b22;
+	--text: #c9d1d9;
+	--muted: #8b949e;
+	--accent: #58a6ff;
+	--border: rgba(110, 118, 129, 0.4);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family:
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		sans-serif;
+	background: radial-gradient(
+		circle at top,
+		#0b1220 0%,
+		#070a12 65%,
+		#040608 100%
+	);
+	color: var(--text);
+	min-height: 100vh;
+}
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.page-header {
+	padding: 1.5rem 1.25rem 0.5rem;
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.page-header h1 {
+	margin: 0 0 0.25rem;
+	font-size: clamp(1.75rem, 4vw, 2.25rem);
+	letter-spacing: -0.02em;
+}
+
+.page-header p {
+	margin: 0;
+	color: var(--muted);
+}
+
+.controls {
+	max-width: 960px;
+	margin: 0 auto 1.5rem;
+	padding: 0 1.25rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+button {
+	border: 1px solid var(--border);
+	border-radius: 0.6rem;
+	padding: 0.6rem 1.1rem;
+	background: rgba(255, 255, 255, 0.08);
+	color: var(--text);
+	cursor: pointer;
+	font-size: 1rem;
+	transition:
+		transform 120ms ease,
+		background 120ms ease;
+}
+
+button:hover {
+	background: rgba(255, 255, 255, 0.12);
+	transform: translateY(-1px);
+}
+
+button:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.status {
+	color: var(--muted);
+	font-size: 0.95rem;
+}
+
+.manual,
+.inventory {
+	max-width: 960px;
+	margin: 0 auto 1.5rem;
+	padding: 0 1.25rem;
+}
+
+.manual h2,
+.inventory h2 {
+	margin: 0 0 0.75rem;
+	font-size: 1.25rem;
+}
+
+.form {
+	display: grid;
+	gap: 0.75rem;
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+	padding: 1rem;
+	background: rgba(18, 20, 26, 0.8);
+}
+
+.form label {
+	display: grid;
+	gap: 0.35rem;
+	font-size: 0.9rem;
+	color: var(--muted);
+}
+
+.form input {
+	border: 1px solid rgba(110, 118, 129, 0.35);
+	border-radius: 0.55rem;
+	padding: 0.5rem 0.65rem;
+	background: rgba(255, 255, 255, 0.06);
+	color: var(--text);
+	font-size: 0.95rem;
+}
+
+.form input:focus {
+	outline: none;
+	border-color: rgba(88, 166, 255, 0.9);
+	box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.18);
+}
+
+.inventory-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+}
+
+.inventory-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 0.75rem;
+	background: rgba(20, 24, 31, 0.85);
+	border-radius: 0.75rem;
+	overflow: hidden;
+}
+
+.inventory-table th,
+.inventory-table td {
+	padding: 0.75rem 0.9rem;
+	text-align: left;
+	border-bottom: 1px solid rgba(110, 118, 129, 0.25);
+}
+
+.inventory-table th {
+	background: rgba(15, 18, 24, 0.9);
+	color: var(--muted);
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+.inventory-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.placeholder {
+	padding: 1rem 0.75rem;
+	border: 1px dashed rgba(110, 118, 129, 0.75);
+	border-radius: 0.75rem;
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--muted);
+	font-style: italic;
+	margin-top: 0.75rem;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.footer {
+	max-width: 960px;
+	margin: 0 auto 2rem;
+	padding: 0 1.25rem;
+	color: rgba(201, 209, 217, 0.6);
+	font-size: 0.85rem;
+	text-align: center;
+}

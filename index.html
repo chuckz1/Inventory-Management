@@ -2,13 +2,73 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Inventory Voice Assistant</title>
+	<link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+	<header class="page-header">
+		<h1>Inventory Voice Assistant</h1>
+		<p>Use the microphone or the forms below to check components in/out and locate parts.
+		</p>
+	</header>
 
+	<section class="controls">
+		<button id="listen">🎤 Listen</button>
+		<div class="status" id="status">Ready.</div>
+	</section>
+
+	<section class="manual">
+		<h2>Manual entry</h2>
+
+		<form id="checkInForm" class="form">
+			<label>
+				Component
+				<input name="component" placeholder="e.g., resistor 10k" required />
+			</label>
+			<label>
+				Bin
+				<input name="bin" placeholder="e.g., A1" required />
+			</label>
+			<button type="submit">Check In</button>
+		</form>
+
+		<form id="checkOutForm" class="form">
+			<label>
+				Component
+				<input name="component" placeholder="e.g., resistor 10k" required />
+			</label>
+			<button type="submit">Check Out</button>
+		</form>
+	</section>
+
+	<section class="inventory">
+		<header class="inventory-header">
+			<h2>Inventory</h2>
+			<button id="refresh">Refresh</button>
+		</header>
+
+		<div id="inventoryPlaceholder" class="placeholder">No inventory data yet.</div>
+
+		<table id="inventoryTable" class="inventory-table hidden">
+			<thead>
+				<tr>
+					<th>Component</th>
+					<th>Bin</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</section>
+
+	<footer class="footer">
+		<small>Powered by Web Speech API + Google Sheets backend</small>
+	</footer>
+
+	<script type="module" src="scripts/main.js"></script>
+	<script type="module" src="scripts/voice.js"></script>
 </body>
 
 </html>
