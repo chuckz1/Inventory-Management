@@ -36,6 +36,8 @@ export function parseCommand(rawText) {
 		_parseFind(text) ||
 		_unknown(rawText);
 
+	console.log("Parsed command:", parsed);
+
 	return { ...parsed, raw: rawText };
 }
 
