@@ -103,7 +103,7 @@ function _parseFind(text) {
 
 function _findKeyword(text, keywords) {
 	for (const keyword of keywords) {
-		if (text.startsWith(keyword)) {
+		if (text.includes(keyword)) {
 			return keyword;
 		}
 	}
