@@ -9,6 +9,11 @@ import {
 	checkOutComponent,
 	getListOfComponents,
 } from "./backend.js";
+import {
+	setComponentList,
+	verifyComponentName,
+	findFuzzyComponent,
+} from "./component.js";
 
 const statusEl = document.getElementById("status");
 const inventoryPlaceholder = document.getElementById("inventoryPlaceholder");
@@ -63,6 +68,7 @@ async function refreshInventory() {
 	setLoading(true);
 	try {
 		const list = await getListOfComponents();
+		setComponentList(list);
 		renderInventory(list);
 		setStatus("Inventory updated.");
 	} catch (err) {
@@ -87,6 +93,14 @@ async function handleCheckIn(event) {
 		return;
 	}
 
+	if (verifyComponentName(component)) {
+		setStatus(
+			"That component is already checked in. Use Check Out first or choose a different name.",
+			true,
+		);
+		return;
+	}
+
 	setStatus("Checking in…");
 
 	try {
@@ -107,6 +121,19 @@ async function handleCheckOut(event) {
 	const component = checkOutForm.elements["component"]?.value.trim();
 	if (!component) {
 		setStatus("Please enter a component.", true);
+		return;
+	}
+
+	if (!verifyComponentName(component)) {
+		const suggestion = findFuzzyComponent(component);
+		if (suggestion) {
+			setStatus(
+				`Component not found. Did you mean "${suggestion.componentName}" (bin ${suggestion.binLocation})?`,
+				true,
+			);
+		} else {
+			setStatus("Component not found in inventory.", true);
+		}
 		return;
 	}
 

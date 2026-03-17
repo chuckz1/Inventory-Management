@@ -22,6 +22,12 @@ import {
 	checkOutComponent,
 	getListOfComponents,
 } from "./backend.js";
+import {
+	setComponentList,
+	findComponentBin,
+	findFuzzyComponent,
+	verifyComponentName,
+} from "./component.js";
 
 const button = document.getElementById("listen");
 const statusEl = document.getElementById("status");
@@ -109,6 +115,10 @@ async function _handleCheckIn({ componentName, binLocation }) {
 		const message = result?.message || "Checked in.";
 		_speak(message);
 		_log(result);
+
+		// Keep the internal component list up to date for fuzzy matching.
+		const list = await getListOfComponents();
+		setComponentList(list);
 	} catch (err) {
 		_log(err);
 		_speak(err.message || "Failed to check in the component.");
@@ -121,11 +131,34 @@ async function _handleCheckOut({ componentName }) {
 		return;
 	}
 
+	// Ensure we have the latest inventory for matching.
+	try {
+		const list = await getListOfComponents();
+		setComponentList(list);
+	} catch (err) {
+		_log("Failed to refresh inventory for fuzzy matching", err);
+	}
+
+	if (!verifyComponentName(componentName)) {
+		const suggestion = findFuzzyComponent(componentName);
+		if (suggestion) {
+			_speak(
+				`I couldn't find "${componentName}". Did you mean "${suggestion.componentName}" in bin ${suggestion.binLocation}?`,
+			);
+		} else {
+			_speak(`I couldn't find "${componentName}" in the inventory.`);
+		}
+		return;
+	}
+
 	try {
 		const result = await checkOutComponent(componentName);
 		const message = result?.message || "Checked out.";
 		_speak(message);
 		_log(result);
+
+		const list = await getListOfComponents();
+		setComponentList(list);
 	} catch (err) {
 		_log(err);
 		_speak(err.message || "Failed to check out the component.");
@@ -140,20 +173,25 @@ async function _handleFind({ componentName }) {
 
 	try {
 		const list = await getListOfComponents();
-		const found = list.find(
-			(item) =>
-				item.componentName?.toLowerCase() === componentName.toLowerCase(),
-		);
+		setComponentList(list);
 
-		if (found) {
-			const message = `The ${found.componentName} is in bin ${found.binLocation}.`;
+		const exact = findComponentBin(componentName);
+		if (exact) {
+			const message = `The ${componentName} is in bin ${exact}.`;
 			_speak(message);
 			_log(message);
-		} else {
-			const message = `I couldn't find ${componentName} in the inventory.`;
-			_speak(message);
-			_log(message);
+			return;
 		}
+
+		const fuzzy = findFuzzyComponent(componentName);
+		if (fuzzy) {
+			const message = `I couldn't find ${componentName}, but I found ${fuzzy.componentName} in bin ${fuzzy.binLocation}.`;
+			_speak(message);
+			_log(message);
+			return;
+		}
+
+		_speak(`I couldn't find ${componentName} in the inventory.`);
 	} catch (err) {
 		_log(err);
 		_speak(err.message || "Failed to locate the component.");
